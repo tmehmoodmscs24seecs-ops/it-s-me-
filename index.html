@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🎂 A Little Surprise 🎂</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    transition: background 1s ease, color 0.8s ease;
+  }
+
+  h1, h2, p { margin: 10px; transition: opacity 1s ease; }
+
+  button {
+    background: #ff3385;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  button:hover { background: #ff5fa0; transform: scale(1.05); }
+
+  #emojiRain {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: fall 5s linear infinite;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-10%); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
+  }
+
+  #slide {
+    z-index: 1;
+    font-size: 1.6rem;
+    max-width: 85%;
+  }
+  #countdown {
+    font-size: 3rem;
+    margin-top: 20px;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<div id="emojiRain"></div>
+<div id="slide"></div>
+<button id="nextBtn">Next ➜</button>
+
+<script>
+const slides = [
+  // --- Intro section ---
+  {text: "👋 Hi there...", bg: "linear-gradient(120deg,#a1c4fd,#c2e9fb)", color: "#111"},
+  {text: "😊 How are you today? I heard something special’s happening...", bg: "linear-gradient(120deg,#f6d365,#fda085)", color: "#222"},
+  {text: "🎂 Wait... is it your birthday?! Because I’ve been working on a little surprise 😏", bg: "linear-gradient(120deg,#fbc2eb,#a6c1ee)", color: "#111"},
+  {text: "🌙 I know we can’t meet exactly at 12:00... so I wanted to make something just for you 💖", bg: "linear-gradient(120deg,#fddb92,#d1fdff)", color: "#222"},
+  {text: "🛠️ For the past few weeks, I’ve been working on this... a small effort to make you smile 💌", bg: "linear-gradient(120deg,#ffecd2,#fcb69f)", color: "#111"},
+  
+  // --- Countdown 1 ---
+  {text: "⏳ Alright... get ready for some laughs first! Countdown begins...", bg: "linear-gradient(120deg,#434343,#000000)", color: "#fff", countdown: true},
+
+  // --- Romantic Funny Lines ---
+  {text: "😜 You know what’s funny? I was trying to ignore you… but even my thoughts refused to cooperate.", bg: "linear-gradient(120deg,#ff9a9e,#fecfef)", color: "#222"},
+  {text: "😉 Every time you smile, my brain stops working for 3–5 business days.", bg: "linear-gradient(120deg,#84fab0,#8fd3f4)", color: "#111"},
+  {text: "😂 I was going to send you a pickup line… but you already picked up my heart.", bg: "linear-gradient(120deg,#fda085,#f6d365)", color: "#111"},
+  {text: "🥰 I don’t need WiFi anymore. Your presence gives me full connection.", bg: "linear-gradient(120deg,#a6c1ee,#fbc2eb)", color: "#111"},
+  {text: "🤭 I tried to find someone better than you… Google said: ‘No results found.’", bg: "linear-gradient(120deg,#fddb92,#d1fdff)", color: "#222"},
+  {text: "🙈 You’re like my favorite song — stuck in my head all day!", bg: "linear-gradient(120deg,#fad0c4,#ffd1ff)", color: "#111"},
+  {text: "😅 You should come with a warning sign: ‘Highly addictive, proceed with caution.’", bg: "linear-gradient(120deg,#f6d365,#fda085)", color: "#111"},
+  {text: "💘 My phone battery lasts longer than my ability to stay mad at you.", bg: "linear-gradient(120deg,#a1c4fd,#c2e9fb)", color: "#111"},
+  {text: "🤣 You’re the reason I smile at my screen like an idiot.", bg: "linear-gradient(120deg,#84fab0,#8fd3f4)", color: "#111"},
+  {text: "💞 If loving you was a subject… I’d still fail — just to study you again!", bg: "linear-gradient(120deg,#fbc2eb,#a6c1ee)", color: "#111"},
+  
+  // --- Countdown 2 ---
+  {text: "🎁 Ready for the real surprise? Countdown starting...", bg: "linear-gradient(120deg,#000000,#434343)", color: "#fff", countdownFinal: true},
+];
+
+const emojis = ["💖","😂","😈","😘","💕","💞","🌸","😍","😅","💘"];
+const slide = document.getElementById("slide");
+const emojiRain = document.getElementById("emojiRain");
+const nextBtn = document.getElementById("nextBtn");
+
+function createEmoji(){
+  const emoji = document.createElement("div");
+  emoji.classList.add("emoji");
+  emoji.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+  emoji.style.left = Math.random()*100+"vw";
+  emoji.style.animationDuration = 3+Math.random()*3+"s";
+  emojiRain.appendChild(emoji);
+  setTimeout(()=>emoji.remove(),5000);
+}
+setInterval(createEmoji,300);
+
+let index = 0;
+function showSlide(){
+  const s = slides[index];
+  document.body.style.background = s.bg;
+  document.body.style.color = s.color;
+  slide.innerHTML = s.text;
+  nextBtn.style.display = "block";
+
+  if(s.countdown){
+    nextBtn.style.display = "none";
+    startCountdown(false);
+  } 
+  else if(s.countdownFinal){
+    nextBtn.style.display = "none";
+    startCountdown(true);
+  }
+}
+
+nextBtn.addEventListener("click",()=>{
+  index++;
+  if(index < slides.length){
+    showSlide();
+  }
+});
+
+function startCountdown(isFinal){
+  let count = 5;
+  slide.innerHTML = `<h2>${isFinal ? "🎉 Final Countdown" : "😎 Countdown starting..."}</h2><div id='countdown'>${count}</div>`;
+  document.body.style.background = "linear-gradient(120deg,#000000,#434343)";
+  document.body.style.color = "#fff";
+
+  const interval = setInterval(()=>{
+    count--;
+    document.getElementById("countdown").innerText = count;
+    if(count===0){
+      clearInterval(interval);
+      if(isFinal){
+        slide.innerHTML = `<h2>💞 Okay... open it now 💞</h2><p>Loading your real surprise...</p>`;
+        setTimeout(()=>{window.location.href="https://tmehmoodmscs24seecs-ops.github.io/hmmmmmm/";},2500);
+      } else {
+        slide.innerHTML = `<h2>😂 Get ready for some romantic laughs!</h2>`;
+        setTimeout(()=>{index++; showSlide();},2000);
+      }
+    }
+  },1000);
+}
+
+showSlide();
+</script>
+
+</body>
+</html>
