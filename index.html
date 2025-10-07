@@ -1,322 +1,309 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>A Very Special Surprise</title>
-<link rel="preconnect" href="https://fonts.gstatic.com">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>It’s Me + Hmmmmmm — Combined Surprise</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --btn: #ff4f8b;
-    --btn-hover: #ff6aa6;
+    --accent:#ff4f8b;
+    --accent-dark:#c92f47;
+    --muted:#666;
+    --card:#fff;
   }
-  html,body{height:100%;margin:0;background:#111;font-family:"Poppins",system-ui,Arial;}
-  body{display:flex;align-items:center;justify-content:center;padding:20px;color:#111}
-  .card{
-    width:100%;max-width:900px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#fff 0%, #fff 0%);box-shadow:0 30px 80px rgba(0,0,0,0.45);
-  }
-  header{
-    display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:linear-gradient(90deg,rgba(255,255,255,0.97),rgba(255,255,255,0.95));
-    border-bottom:1px solid rgba(0,0,0,0.05);
-  }
-  .brand{font-weight:700;color:#b71c3a}
-  .controls { display:flex; gap:12px; align-items:center; }
-  .music-btn{
-    background:transparent;border:2px solid rgba(183,28,58,0.12);color:var(--btn);padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:600;
-  }
-  main.stage{
-    min-height:560px;padding:34px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;
-    transition:background 700ms ease, color 500ms;
-  }
-  #slideText{max-width:860px;text-align:center;font-size:1.35rem;line-height:1.4;margin-bottom:18px}
-  .nextBtn{background:var(--btn);color:#fff;border:none;padding:14px 28px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(255,79,140,0.16)}
-  .nextBtn:disabled{opacity:.5;cursor:not-allowed}
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:#111;font-family:"Poppins",system-ui,Arial;color:#111}
+  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+  .card{width:100%;max-width:980px;border-radius:16px;overflow:hidden;background:var(--card);box-shadow:0 30px 80px rgba(0,0,0,0.35)}
+  header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:linear-gradient(90deg,rgba(255,255,255,0.98),rgba(255,255,255,0.96));border-bottom:1px solid rgba(0,0,0,0.05)}
+  .brand{font-weight:700;color:var(--accent-dark)}
+  .hint{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px}
+  .musicBtn{background:transparent;border:2px solid rgba(201,47,71,0.12);color:var(--accent);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
+  main.stage{min-height:640px;padding:30px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:background 700ms ease,color 400ms}
+  #viewport{width:100%;max-width:880px;height:360px;position:relative;overflow:hidden;border-radius:14px}
+  .slide{position:absolute;inset:0;padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform 520ms cubic-bezier(.2,.9,.2,1),opacity 420ms}
+  .slide.hidden{opacity:0;pointer-events:none}
+  .slide-left{transform:translateX(-120%);opacity:0}
+  .slide-right{transform:translateX(120%);opacity:0}
+  .slide-center{transform:translateX(0);opacity:1}
+  #titleText{font-size:1.6rem;line-height:1.35;margin-bottom:10px}
+  #subText{font-size:1rem;color:var(--muted);max-width:86%;margin-top:6px}
+  .controls{margin-top:18px}
+  .btn{background:var(--accent);color:#fff;border:0;padding:12px 26px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:0 10px 26px rgba(255,79,140,0.14)}
+  .btn.secondary{background:transparent;border:2px solid rgba(201,47,71,0.12);color:var(--accent)}
+  #count{font-size:3rem;font-weight:800;color:var(--accent);margin-top:12px;display:none}
   #emojiLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-  .emoji { position:absolute;font-size:28px;opacity:0.95; animation:floatUp linear infinite; }
-  @keyframes floatUp {
-    from{ transform: translateY(40vh) scale(0.9); opacity:1;}
-    to{ transform: translateY(-30vh) scale(1.05); opacity:0;}
-  }
-  .countBox{font-size:2.4rem;font-weight:800;color:var(--btn); margin-top:12px}
-  .mini { font-size:0.95rem;color:rgba(0,0,0,0.6); margin-top:10px; }
-  footer{display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent)}
-  .smallLink{color:#444;font-size:0.95rem}
-  /* responsive */
-  @media (max-width:640px){
-    #slideText{font-size:1.05rem;padding:0 12px}
-    .emoji{font-size:22px}
-    .countBox{font-size:2rem}
-  }
+  .emoji{position:absolute;font-size:28px;opacity:.95;animation:floatUp linear infinite}
+  @keyframes floatUp{from{transform:translateY(40vh) scale(.92);opacity:1} to{transform:translateY(-30vh) scale(1.05);opacity:0}}
+  .confetti{position:absolute;inset:0;pointer-events:none}
+  footer{padding:14px;text-align:center;font-size:0.95rem;color:#666}
+  @media (max-width:720px){#viewport{height:520px}.slide{padding:18px} #titleText{font-size:1.15rem}}
 </style>
 </head>
 <body>
+  <div class="wrap">
+    <div class="card" role="application" aria-label="Combined surprise">
+      <header>
+        <div class="brand">It’s Me — A Little Surprise</div>
+        <div class="hint">
+          <button id="musicToggle" class="musicBtn" aria-pressed="false">Enable Music</button>
+          <span style="font-size:13px;color:var(--muted)">Click Next to advance — music will start on first click</span>
+        </div>
+      </header>
 
-<div class="card" role="application" aria-label="Surprise slideshow">
-  <header>
-    <div class="brand">A small surprise — just for her</div>
-    <div class="controls">
-      <button id="musicToggle" class="music-btn" aria-pressed="false">Play Music</button>
-      <div class="mini">Tip: Tap to enable sound (required on mobile)</div>
+      <main class="stage" id="stage" style="background:linear-gradient(120deg,#fff8fb,#fffaf2);color:#111">
+        <div id="viewport" aria-live="polite">
+          <!-- slides injected here -->
+        </div>
+
+        <div id="emojiLayer" aria-hidden="true"></div>
+        <div id="count" role="status" aria-live="polite"></div>
+
+        <div class="controls">
+          <button id="nextBtn" class="btn">Next ➜</button>
+        </div>
+      </main>
+
+      <footer>Made with ♥ — publish to GitHub Pages and share the link</footer>
     </div>
-  </header>
+  </div>
 
-  <main id="stage" class="stage" style="background:linear-gradient(120deg,#fef3f6,#fff8f9);color:#222">
-    <div id="emojiLayer"></div>
-    <div id="slideText" aria-live="polite"></div>
-    <div id="extraArea" class="mini"></div>
-    <div id="countIndicator" class="countBox" style="display:none"></div>
-    <div style="margin-top:18px">
-      <button id="nextBtn" class="nextBtn">Next ➜</button>
-    </div>
-  </main>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+  /* ============================
+     Slides content (ITS-ME first, then HMMMMMM)
+     Each slide: {title, sub, bg (css), color, special}
+     special: 'count1','count2','final' etc
+     ============================ */
 
-  <footer>
-    <div class="smallLink">Made with ♥ — one click away from a bigger surprise</div>
-  </footer>
-</div>
+  const slides = [
+    // IT'S ME / intro
+    {title:"👋 Hi — it's me.", sub:"Just wanted to say hello before anything else.", bg:"linear-gradient(120deg,#fef6ff,#ffeef2)", color:"#222"},
+    {title:"😊 Hello — how are you today?", sub:"I heard something special is happening...", bg:"linear-gradient(120deg,#fff7e6,#ffe3d3)", color:"#222"},
+    {title:"🎂 Is it your birthday? I couldn't let the day pass without doing something small.", sub:"Please focus — this is for you only.", bg:"linear-gradient(120deg,#f3e8ff,#fbe6ff)", color:"#222"},
+    {title:"🌙 I know we can't meet at 12:00 — so I made this little thing to make you smile.", sub:"I've been working on it for weeks 💌", bg:"linear-gradient(120deg,#e6fff7,#d6fbff)", color:"#222"},
+    {title:"✨ Ready for a tiny countdown before some fun?", sub:"(It will start automatically)", bg:"linear-gradient(120deg,#fffaf0,#fff1f5)", color:"#222", special:"count1"},
 
-<!-- YouTube API -->
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-/* -------------------------
-  Slides data structure
-   - text: main text for slide
-   - bg: background CSS
-   - color: text color
-   - special: "count1" / "count2" / "count3" for countdowns
-------------------------- */
-const slides = [
-  // Intro warmups (7)
-  {text:"👋 Hi, love — hey there!", bg:"linear-gradient(120deg,#fef6ff,#ffeef2)", color:"#222"},
-  {text:"😊 Hello — how are you? I heard today is your birthday 🎂", bg:"linear-gradient(120deg,#fff7e6,#ffe3d3)", color:"#222"},
-  {text:"💌 I know we can't meet at midnight, so I made this little thing just for you.", bg:"linear-gradient(120deg,#f3e8ff,#fbe6ff)", color:"#222"},
-  {text:"🌙 I've been working on this for weeks — a small effort to make you feel special.", bg:"linear-gradient(120deg,#e6fff7,#d6fbff)", color:"#222"},
-  {text:"✨ Focus for a minute—this is for you only.", bg:"linear-gradient(120deg,#fff0f3,#fff6e6)", color:"#222"},
-  {text:"🛠️ I hope this little surprise brings a big smile to your face 😊", bg:"linear-gradient(120deg,#ffefe6,#ffe6f0)", color:"#222"},
-  {text:"⏳ Ready? A tiny countdown will lead to some silly and sweet moments...", bg:"linear-gradient(120deg,#e8f6ff,#eef7ff)", color:"#222", special:"count1"},
+    // HMMMMMM - funny/romantic jokes (10)
+    {title:"😜 You know what’s funny? I tried to ignore you… but my thoughts refused to cooperate.", bg:"linear-gradient(120deg,#ffd2e2,#ffeedd)", color:"#222"},
+    {title:"😉 Every time you smile, I forget what I was about to say.", bg:"linear-gradient(120deg,#ffd6a5,#fceabb)", color:"#222"},
+    {title:"😂 I had a pickup line... but you already picked up my heart.", bg:"linear-gradient(120deg,#b8c6ff,#f6f0ff)", color:"#222"},
+    {title:"🥰 I don’t need Wi-Fi — your presence gives me full connection.", bg:"linear-gradient(120deg,#fff1f0,#ffe6ee)", color:"#222"},
+    {title:"🤭 I tried to find someone better than you — Google returned no results.", bg:"linear-gradient(120deg,#eaffd0,#fff7d6)", color:"#222"},
+    {title:"🙈 You're my favorite song — stuck in my head all day.", bg:"linear-gradient(120deg,#ffdede,#ffeedd)", color:"#222"},
+    {title:"😅 You should have a warning: Highly addictive. Handle with care!", bg:"linear-gradient(120deg,#dfe9ff,#f2f7ff)", color:"#222"},
+    {title:"💘 My phone battery lasts longer than my ability to stay mad at you.", bg:"linear-gradient(120deg,#ffe2f0,#fff7f3)", color:"#222"},
+    {title:"🤣 You make me smile at my screen like a fool — worth every second.", bg:"linear-gradient(120deg,#f8ffd1,#eaf7dd)", color:"#222"},
+    {title:"💞 If loving you was a subject, I'd book extra classes.", bg:"linear-gradient(120deg,#f4e7ff,#fff1ff)", color:"#222", special:"count2"},
 
-  // Romantic-funny set (10 teaser jokes)
-  {text:"😜 You know what’s funny? I tried to ignore you... but my thoughts refused to cooperate.", bg:"linear-gradient(120deg,#ffd2e2,#ffeedd)", color:"#222"},
-  {text:"😉 When you smile, I forget what I was going to say. Every. Single. Time.", bg:"linear-gradient(120deg,#ffd6a5,#fceabb)", color:"#222"},
-  {text:"😂 I was going to send a pickup line... but you already picked up my heart.", bg:"linear-gradient(120deg,#b8c6ff,#f6f0ff)", color:"#222"},
-  {text:"🥰 I don’t need Wi-Fi — your presence gives me full connection.", bg:"linear-gradient(120deg,#fff1f0,#ffe6ee)", color:"#222"},
-  {text:"🤭 I tried to find someone better than you... Google returned no results.", bg:"linear-gradient(120deg,#eaffd0,#fff7d6)", color:"#222"},
-  {text:"🙈 You’re like my favorite song — stuck in my head all day!", bg:"linear-gradient(120deg,#ffdede,#ffeedd)", color:"#222"},
-  {text:"😅 You should come with a warning: Highly addictive — handle with care!", bg:"linear-gradient(120deg,#dfe9ff,#f2f7ff)", color:"#222"},
-  {text:"💘 My phone battery lasts longer than my ability to stay mad at you.", bg:"linear-gradient(120deg,#ffe2f0,#fff7f3)", color:"#222"},
-  {text:"🤣 You make me smile at my screen like an idiot — and I love it.", bg:"linear-gradient(120deg,#f8ffd1,#eaf7dd)", color:"#222"},
-  {text:"💞 If loving you was a subject, I’d sign up for extra classes.", bg:"linear-gradient(120deg,#f4e7ff,#fff1ff)", color:"#222"},
-  // Countdown before Round 1
-  {text:"🎁 Ready for round 1? Small countdown coming up...", bg:"linear-gradient(120deg,#111,#444)", color:"#fff", special:"count2"},
+    // (end of HMMMMMM) -> now optionally could continue other parts; here we stop after merged content
+    // Add an ending slide linking back to main site / or to minahil-birthday etc.
+    {title:"🎉 That was round of little jokes & teasing!", sub:"Hope that made you smile — want a final surprise?", bg:"linear-gradient(120deg,#fff0f5,#ffeef6)", color:"#222"},
+    {title:"❣️ Final little surprise is ready — click to open", sub:"(Or wait for the countdown)", bg:"linear-gradient(120deg,#fff7e6,#fff1d9)", color:"#222", special:"final" }
+  ];
 
-  // Round 1: 10 romantic pickup lines
-  {text:"🌹 You’re the reason behind my smile every single day.", bg:"linear-gradient(120deg,#fff0f5,#ffeef2)", color:"#222"},
-  {text:"🌸 If I had a flower for every time I thought of you, I'd have a garden forever.", bg:"linear-gradient(120deg,#fff7e6,#fff1d9)", color:"#222"},
-  {text:"💭 You don't cross my mind — you live in it.", bg:"linear-gradient(120deg,#eef6ff,#eaf7ff)", color:"#222"},
-  {text:"✨ Even a dictionary wouldn't have enough words to describe you.", bg:"linear-gradient(120deg,#fff1f7,#fff6e6)", color:"#222"},
-  {text:"🌙 You're my favorite place to go when my mind needs peace.", bg:"linear-gradient(120deg,#f0fff4,#eafffb)", color:"#222"},
-  {text:"📱 The best part of my day is when your name pops up on my screen.", bg:"linear-gradient(120deg,#fff0f0,#fff9f2)", color:"#222"},
-  {text:"✍️ You're the poem I never could write but always feel.", bg:"linear-gradient(120deg,#fce4ff,#f8efff)", color:"#222"},
-  {text:"💼 If loving you was a job, I'd still never take a day off.", bg:"linear-gradient(120deg,#fff7de,#fff0d9)", color:"#222"},
-  {text:"🌅 Your smile is my favorite view.", bg:"linear-gradient(120deg,#fff1f0,#fffaf2)", color:"#222"},
-  {text:"🌌 You’re the dream I never want to wake up from.", bg:"linear-gradient(120deg,#f0eaff,#f8f0ff)", color:"#222"},
-  // Countdown before Round 2 (longer)
-  {text:"⏳ Round 2 begins soon — a bigger countdown to set the mood...", bg:"linear-gradient(120deg,#111,#333)", color:"#fff", special:"count3"},
+  /* ============== DOM refs ============== */
+  const viewport = document.getElementById('viewport');
+  const nextBtn = document.getElementById('nextBtn');
+  const countBox = document.getElementById('count');
+  const emojiLayer = document.getElementById('emojiLayer');
+  const musicToggle = document.getElementById('musicToggle');
 
-  // Round 2: 10 more romantic pickup lines
-  {text:"✨ You must be tired — you’ve been running through my dreams too.", bg:"linear-gradient(120deg,#fff0f6,#ffeef6)", color:"#222"},
-  {text:"🗺️ Do you have a map? I keep getting lost in your eyes.", bg:"linear-gradient(120deg,#fff4e6,#fff1dc)", color:"#222"},
-  {text:"🤝 Your hand looks heavy — can I carry it for you?", bg:"linear-gradient(120deg,#f0fff8,#e8fff4)", color:"#222"},
-  {text:"🎵 You're my favorite song — I play you on repeat in my head.", bg:"linear-gradient(120deg,#f9eaff,#fff0ff)", color:"#222"},
-  {text:"⏳ If beauty were time, you'd be eternity.", bg:"linear-gradient(120deg,#fff3f0,#fffaf4)", color:"#222"},
-  {text:"💓 You make my heart do things it never learned to do.", bg:"linear-gradient(120deg,#fff0f8,#fff5f2)", color:"#222"},
-  {text:"☀️ You're my sunshine on a cloudy day.", bg:"linear-gradient(120deg,#fff8e6,#fff3d9)", color:"#222"},
-  {text:"🍬 You're so sweet I might get diabetes — ketchup? (Just kidding!)", bg:"linear-gradient(120deg,#ffe8f1,#fff3f8)", color:"#222"},
-  {text:"✨ You aren't a genie but you're my wish come true.", bg:"linear-gradient(120deg,#f1f0ff,#eef7ff)", color:"#222"},
-  {text:"🧪 Are you made of copper and tellurium? Because you're Cu-Te 😉", bg:"linear-gradient(120deg,#ffeef0,#fff5f6)", color:"#222"},
-  // Final countdown + redirect
-  {text:"🎉 Final countdown — then the big surprise!", bg:"linear-gradient(120deg,#111,#000)", color:"#fff", special:"finalRedirect"}
-];
+  /* create slides in DOM */
+  const domSlides = [];
+  slides.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'slide slide-right hidden';
+    el.style.background = s.bg || '#fff';
+    el.style.color = s.color || '#111';
+    el.innerHTML = `<div id="titleText">${s.title || ''}</div><div id="subText">${s.sub || ''}</div>`;
+    // initial position: right offscreen
+    viewport.appendChild(el);
+    domSlides.push(el);
+  });
 
-/* ------------- UI references ------------- */
-const stage = document.getElementById('stage');
-const slideText = document.getElementById('slideText');
-const extraArea = document.getElementById('extraArea');
-const nextBtn = document.getElementById('nextBtn');
-const countIndicator = document.getElementById('countIndicator');
-const emojiLayer = document.getElementById('emojiLayer');
-
-let idx = 0;
-let countdownTimer = null;
-
-/* Floating emoji generator (for charm) */
-const emojiPool = ["💖","😂","😈","😘","💕","💞","🌸","😍","😅","💘","🎈","🌟"];
-function spawnEmoji() {
-  const e = document.createElement('div');
-  e.className = 'emoji';
-  e.style.left = (5 + Math.random()*90) + '%';
-  e.style.bottom = (5 + Math.random()*20) + 'vh';
-  e.style.fontSize = (18 + Math.random()*30) + 'px';
-  e.style.animationDuration = (4 + Math.random()*5) + 's';
-  e.textContent = emojiPool[Math.floor(Math.random()*emojiPool.length)];
-  emojiLayer.appendChild(e);
-  setTimeout(() => e.remove(), 9000);
-}
-const emojiSpawnInterval = setInterval(spawnEmoji, 350);
-
-/* show a slide */
-function renderSlide(i) {
-  const s = slides[i];
-  stage.style.background = s.bg;
-  stage.style.color = s.color || '#111';
-  slideText.innerHTML = s.text;
-  extraArea.innerHTML = '';
-  countIndicator.style.display = 'none';
-  nextBtn.style.display = 'inline-block';
-  // handle special slides
-  if (s.special === "count1") {
-    nextBtn.style.display = 'none';
-    runSimpleCountdown(5, ()=>{ idx++; renderSlide(idx); });
-  } else if (s.special === "count2") {
-    nextBtn.style.display = 'none';
-    runSimpleCountdown(5, ()=>{ idx++; renderSlide(idx); });
-  } else if (s.special === "count3") {
-    nextBtn.style.display = 'none';
-    runSimpleCountdown(10, ()=>{ idx++; renderSlide(idx); });
-  } else if (s.special === "finalRedirect") {
-    nextBtn.style.display = 'none';
-    runFinalCountdown(10, ()=>{ window.location.href = "https://tmehmoodmscs24seecs-ops.github.io/don-t-open-it/"; });
+  let idx = 0;
+  // helper to place slide positions
+  function setSlideClass(el, cls){
+    el.classList.remove('slide-left','slide-right','slide-center','hidden');
+    if(cls) el.classList.add(cls);
   }
-}
 
-/* simple countdown display (seconds, callback) */
-function runSimpleCountdown(seconds, cb) {
-  countIndicator.style.display = 'block';
-  let sec = seconds;
-  countIndicator.textContent = sec;
-  countdownTimer = setInterval(()=>{
-    sec--;
-    countIndicator.textContent = sec;
-    if (sec <= 0) {
-      clearInterval(countdownTimer);
-      countIndicator.style.display = 'none';
-      cb();
-    }
-  }, 1000);
-}
-
-/* final countdown with message then callback */
-function runFinalCountdown(seconds, cb) {
-  countIndicator.style.display = 'block';
-  let sec = seconds;
-  // show big counter
-  countIndicator.style.fontSize = '2.6rem';
-  countIndicator.textContent = sec;
-  countdownTimer = setInterval(()=>{
-    sec--;
-    countIndicator.textContent = sec;
-    if (sec <= 0) {
-      clearInterval(countdownTimer);
-      countIndicator.style.display = 'none';
-      slideText.innerHTML = "💞 Okay... open it now — and don't cry 🥺";
-      extraArea.innerHTML = "Loading the full surprise...";
-      setTimeout(cb, 1800);
-    }
-  }, 1000);
-}
-
-/* next button handler */
-nextBtn.addEventListener('click', ()=>{
-  idx++;
-  if (idx < slides.length) {
-    renderSlide(idx);
-  } else {
-    // fallback redirect
-    window.location.href = "https://tmehmoodmscs24seecs-ops.github.io/don-t-open-it/";
-  }
-});
-
-/* initial render */
-renderSlide(0);
-
-/* ------------- YouTube music embed and control ------------- */
-/* We'll use the IFrame API to create a hidden player that autoplays muted (works around autoplay policies),
-   and provide a small control for user to enable sound. */
-let ytPlayer;
-const YT_VIDEO_ID = 'Umqb9KENgmk'; // your supplied ID
-let musicEnabled = false;
-const musicBtn = document.getElementById('musicToggle');
-musicBtn.addEventListener('click', () => {
-  if (!ytPlayer) {
-    // create player if not ready
-    createPlayerAndPlay();
-    musicBtn.textContent = 'Unmute / Play';
-    musicBtn.setAttribute('aria-pressed','true');
-  } else {
-    // toggle mute / unmute & play/pause
-    if (musicEnabled) {
-      ytPlayer.pauseVideo();
-      musicBtn.textContent = 'Play Music';
-      musicEnabled = false;
+  // slide-in animation: current -> left, next from right -> center
+  function showSlide(toIndex, direction='next'){
+    // hide previous
+    domSlides.forEach((d, i) => {
+      d.classList.add('hidden');
+      d.classList.remove('slide-left','slide-right','slide-center');
+    });
+    const target = domSlides[toIndex];
+    // set starting position depending on direction
+    if(direction === 'next'){
+      setSlideClass(target,'slide-right');
+      // force reflow
+      void target.offsetWidth;
+      // bring center
+      target.classList.remove('hidden');
+      setSlideClass(target,'slide-center');
     } else {
-      ytPlayer.unMute();
-      ytPlayer.setVolume(22); // low volume
-      ytPlayer.playVideo();
-      musicBtn.textContent = 'Pause Music';
-      musicEnabled = true;
+      setSlideClass(target,'slide-left');
+      void target.offsetWidth;
+      target.classList.remove('hidden');
+      setSlideClass(target,'slide-center');
+    }
+
+    // update background & color for container stage
+    const s = slides[toIndex];
+    const stage = document.querySelector('.stage');
+    stage.style.background = s.bg || stage.style.background;
+    stage.style.color = s.color || stage.style.color;
+
+    // handle specials
+    countBox.style.display = 'none';
+    nextBtn.style.display = 'inline-block';
+    if(s.special === 'count1'){
+      nextBtn.style.display = 'none';
+      runCountdown(5, ()=> { idx++; showSlide(idx,'next'); });
+    } else if(s.special === 'count2'){
+      nextBtn.style.display = 'none';
+      runCountdown(5, ()=> { idx++; showSlide(idx,'next'); });
+    } else if(s.special === 'final'){
+      // final: show countdown and then link to hmmmmmm page (or open automatically)
+      nextBtn.style.display = 'none';
+      runFinalCountdown(8, ()=> {
+        // open hmmmmmm repo in same window
+        window.location.href = 'https://tmehmoodmscs24seecs-ops.github.io/hmmmmmm/';
+      });
     }
   }
-});
 
-/* YT API callback */
-function createPlayerAndPlay(){
-  // create hidden container
-  const div = document.createElement('div');
-  div.id = 'ytplayerwrap';
-  div.style.position = 'fixed';
-  div.style.width = '1px';
-  div.style.height = '1px';
-  div.style.left = '-9999px';
-  document.body.appendChild(div);
+  // initialize first slide
+  showSlide(0,'next');
 
-  ytPlayer = new YT.Player(div, {
-    height: '1', width: '1',
-    videoId: YT_VIDEO_ID,
-    playerVars: {
-      autoplay: 1,
-      controls: 0,
-      disablekb: 1,
-      loop: 1,
-      modestbranding: 1,
-      rel: 0,
-      playsinline: 1,
-      playlist: YT_VIDEO_ID,
-      mute: 1
-    },
-    events: {
-      onReady: (e) => {
-        e.target.mute(); // start muted to satisfy autoplay rules
-        e.target.setVolume(22);
-        e.target.playVideo();
-        // set a short delay and then unmute slightly if user already flagged
-        // (we rely on user's click on musicBtn to unmute)
-      }
+  // next button handler
+  nextBtn.addEventListener('click', ()=>{
+    // start music on first user interaction
+    enableMusicOnInteraction();
+
+    idx++;
+    if(idx < slides.length){
+      showSlide(idx,'next');
+    } else {
+      // fallback
+      window.location.href = 'https://tmehmoodmscs24seecs-ops.github.io/hmmmmmm/';
     }
   });
-}
 
-/* ensure API loaded callback */
-function onYouTubeIframeAPIReady(){
-  // we don't auto-create the player until user interacts (musicBtn click)
-  // This function is required by the API and will be called by the script
-}
+  // keyboard navigation
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'Enter') nextBtn.click();
+    if(e.key === 'ArrowLeft' && idx>0){
+      idx--;
+      showSlide(idx,'prev');
+    }
+  });
 
-/* cleanup on unload */
-window.addEventListener('beforeunload', ()=>{
-  if (ytPlayer && ytPlayer.destroy) ytPlayer.destroy();
-  clearInterval(emojiSpawnInterval);
-});
-</script>
+  /* ========== countdowns ========== */
+  let countdownHandle = null;
+  function runCountdown(seconds, cb){
+    countBox.style.display = 'block';
+    countBox.textContent = seconds;
+    let s = seconds;
+    countdownHandle = setInterval(()=>{
+      s--;
+      countBox.textContent = s;
+      if(s <= 0){
+        clearInterval(countdownHandle);
+        countBox.style.display = 'none';
+        cb();
+      }
+    },1000);
+  }
+  function runFinalCountdown(seconds, cb){
+    countBox.style.display = 'block';
+    countBox.textContent = seconds;
+    let s = seconds;
+    countdownHandle = setInterval(()=>{
+      s--;
+      countBox.textContent = s;
+      if(s <= 0){
+        clearInterval(countdownHandle);
+        countBox.style.display = 'none';
+        cb();
+      }
+    },1000);
+  }
+
+  /* ========== emoji floating ========== */
+  const EMOJI_POOL = ["💖","😂","😘","💕","💞","🌸","😍","😅","🎈","🌟"];
+  function spawnEmoji(){
+    const e = document.createElement('div');
+    e.className = 'emoji';
+    e.style.left = (5 + Math.random()*90) + '%';
+    e.style.bottom = (5 + Math.random()*20) + 'vh';
+    e.style.fontSize = (18 + Math.random()*28) + 'px';
+    e.style.animationDuration = (4 + Math.random()*5) + 's';
+    e.textContent = EMOJI_POOL[Math.floor(Math.random()*EMOJI_POOL.length)];
+    emojiLayer.appendChild(e);
+    setTimeout(()=> e.remove(), 9000);
+  }
+  const emojiTimer = setInterval(spawnEmoji, 380);
+
+  /* ========== YouTube music (muted autoplay then unmute on interaction) ========== */
+  let ytPlayer = null, musicStarted = false;
+  const YT_ID = 'Umqb9KENgmk'; // your chosen video id
+
+  function createYT(){
+    if(ytPlayer) return;
+    const wr = document.createElement('div');
+    wr.id = 'yt_hidden';
+    wr.style.position='fixed'; wr.style.left='-9999px'; wr.style.width='1px'; wr.style.height='1px';
+    document.body.appendChild(wr);
+
+    ytPlayer = new YT.Player(wr, {
+      height:'1', width:'1',
+      videoId: YT_ID,
+      playerVars: {
+        autoplay:1, controls:0, loop:1, playlist:YT_ID, modestbranding:1, rel:0, playsinline:1, mute:1
+      },
+      events:{
+        onReady: (e)=> { e.target.mute(); e.target.setVolume(20); e.target.playVideo(); }
+      }
+    });
+  }
+
+  function enableMusicOnInteraction(){
+    if(musicStarted) return;
+    musicStarted = true;
+    // attempt to create player
+    if(typeof YT === 'undefined' || !YT.Player) {
+      // API may not have loaded yet: try creating anyway (onYouTubeIframeAPIReady will exist)
+      createYT();
+    } else {
+      createYT();
+    }
+    // unmute after small delay (user-initiated)
+    setTimeout(() => {
+      try{ if(ytPlayer && ytPlayer.unMute) { ytPlayer.unMute(); ytPlayer.setVolume(24); } }catch(e){}
+    }, 400);
+    musicToggle.textContent = 'Music ON';
+    musicToggle.setAttribute('aria-pressed','true');
+  }
+
+  // music toggle button: explicit user control
+  musicToggle.addEventListener('click', () => {
+    enableMusicOnInteraction();
+  });
+
+  // ensure YouTube API callback exists
+  function onYouTubeIframeAPIReady(){ /* we create player lazily on interaction */ }
+
+  /* cleanup */
+  window.addEventListener('beforeunload', ()=>{
+    try{ if(ytPlayer && ytPlayer.destroy) ytPlayer.destroy(); }catch(e){}
+    clearInterval(emojiTimer);
+  });
+  </script>
 </body>
 </html>
