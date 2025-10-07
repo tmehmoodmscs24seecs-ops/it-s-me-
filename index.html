@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>It’s Me + Hmmmmmm — Combined Surprise</title>
+<title>It's Me → Hmmmmmm — Surprise (with hidden YouTube music)</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --accent:#ff4f8b;
-    --accent-dark:#c92f47;
+    --accent:#ff6b9d;
+    --accent-dark:#c94b4b;
     --muted:#666;
     --card:#fff;
   }
@@ -16,52 +16,49 @@
   html,body{height:100%;margin:0;background:#111;font-family:"Poppins",system-ui,Arial;color:#111}
   .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
   .card{width:100%;max-width:980px;border-radius:16px;overflow:hidden;background:var(--card);box-shadow:0 30px 80px rgba(0,0,0,0.35)}
-  header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:linear-gradient(90deg,rgba(255,255,255,0.98),rgba(255,255,255,0.96));border-bottom:1px solid rgba(0,0,0,0.05)}
+  header{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:linear-gradient(90deg,rgba(255,255,255,0.98),rgba(255,255,255,0.96));border-bottom:1px solid rgba(0,0,0,0.05)}
   .brand{font-weight:700;color:var(--accent-dark)}
   .hint{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px}
-  .musicBtn{background:transparent;border:2px solid rgba(201,47,71,0.12);color:var(--accent);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600}
   main.stage{min-height:640px;padding:30px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:background 700ms ease,color 400ms}
-  #viewport{width:100%;max-width:880px;height:360px;position:relative;overflow:hidden;border-radius:14px}
-  .slide{position:absolute;inset:0;padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform 520ms cubic-bezier(.2,.9,.2,1),opacity 420ms}
-  .slide.hidden{opacity:0;pointer-events:none}
-  .slide-left{transform:translateX(-120%);opacity:0}
-  .slide-right{transform:translateX(120%);opacity:0}
-  .slide-center{transform:translateX(0);opacity:1}
-  #titleText{font-size:1.6rem;line-height:1.35;margin-bottom:10px}
+  #viewport{width:100%;max-width:900px;height:520px;position:relative;overflow:hidden;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+  .slide{position:absolute;inset:0;padding:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:transform 520ms cubic-bezier(.2,.9,.2,1),opacity 420ms}
+  .off-right{transform:translateX(120%);opacity:0}
+  .off-left{transform:translateX(-120%);opacity:0}
+  .center{transform:translateX(0);opacity:1}
+  #titleText{font-size:1.65rem;line-height:1.35;margin-bottom:12px}
   #subText{font-size:1rem;color:var(--muted);max-width:86%;margin-top:6px}
   .controls{margin-top:18px}
   .btn{background:var(--accent);color:#fff;border:0;padding:12px 26px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:0 10px 26px rgba(255,79,140,0.14)}
   .btn.secondary{background:transparent;border:2px solid rgba(201,47,71,0.12);color:var(--accent)}
   #count{font-size:3rem;font-weight:800;color:var(--accent);margin-top:12px;display:none}
-  #emojiLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  #emojiLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
   .emoji{position:absolute;font-size:28px;opacity:.95;animation:floatUp linear infinite}
   @keyframes floatUp{from{transform:translateY(40vh) scale(.92);opacity:1} to{transform:translateY(-30vh) scale(1.05);opacity:0}}
-  .confetti{position:absolute;inset:0;pointer-events:none}
-  footer{padding:14px;text-align:center;font-size:0.95rem;color:#666}
-  @media (max-width:720px){#viewport{height:520px}.slide{padding:18px} #titleText{font-size:1.15rem}}
+  .confetti{position:absolute;inset:0;pointer-events:none;z-index:6}
+  .soundPrompt{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;background:rgba(255,255,255,0.95);color:#111;padding:10px 14px;border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,0.12);display:none;z-index:999}
+  footer{padding:12px;text-align:center;font-size:0.95rem;color:#666}
+  @media (max-width:720px){#viewport{height:640px}.slide{padding:18px} #titleText{font-size:1.2rem}}
 </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card" role="application" aria-label="Combined surprise">
+    <div class="card" role="application" aria-label="Combined surprise with hidden music">
       <header>
-        <div class="brand">It’s Me — A Little Surprise</div>
+        <div class="brand">It's Me — Surprise</div>
         <div class="hint">
-          <button id="musicToggle" class="musicBtn" aria-pressed="false">Enable Music</button>
-          <span style="font-size:13px;color:var(--muted)">Click Next to advance — music will start on first click</span>
+          <span style="font-size:13px;color:var(--muted)">Click Next to advance — music will unmute after your first interaction</span>
         </div>
       </header>
 
       <main class="stage" id="stage" style="background:linear-gradient(120deg,#fff8fb,#fffaf2);color:#111">
-        <div id="viewport" aria-live="polite">
-          <!-- slides injected here -->
-        </div>
-
+        <div id="viewport" aria-live="polite"></div>
         <div id="emojiLayer" aria-hidden="true"></div>
+        <div id="confetti" class="confetti" aria-hidden="true"></div>
         <div id="count" role="status" aria-live="polite"></div>
 
         <div class="controls">
           <button id="nextBtn" class="btn">Next ➜</button>
+          <button id="prevBtn" class="btn secondary" style="margin-left:12px;display:none">← Prev</button>
         </div>
       </main>
 
@@ -69,148 +66,153 @@
     </div>
   </div>
 
+  <!-- small visible prompt if browsers block unmute -->
+  <div id="soundPrompt" class="soundPrompt">🔊 Click anywhere to enable music</div>
+
+  <!-- YouTube IFrame API - hidden player will be created -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-  /* ============================
-     Slides content (ITS-ME first, then HMMMMMM)
-     Each slide: {title, sub, bg (css), color, special}
+  /* =============================
+     Slides content (ITS-ME then HMMMMMM)
+     Keep content and colors same as in your 'hmmmmmm' template.
+     Each slide: {title, sub, bg, color, special}
      special: 'count1','count2','final' etc
-     ============================ */
+     ============================= */
 
   const slides = [
-    // IT'S ME / intro
-    {title:"👋 Hi — it's me.", sub:"Just wanted to say hello before anything else.", bg:"linear-gradient(120deg,#fef6ff,#ffeef2)", color:"#222"},
-    {title:"😊 Hello — how are you today?", sub:"I heard something special is happening...", bg:"linear-gradient(120deg,#fff7e6,#ffe3d3)", color:"#222"},
-    {title:"🎂 Is it your birthday? I couldn't let the day pass without doing something small.", sub:"Please focus — this is for you only.", bg:"linear-gradient(120deg,#f3e8ff,#fbe6ff)", color:"#222"},
-    {title:"🌙 I know we can't meet at 12:00 — so I made this little thing to make you smile.", sub:"I've been working on it for weeks 💌", bg:"linear-gradient(120deg,#e6fff7,#d6fbff)", color:"#222"},
-    {title:"✨ Ready for a tiny countdown before some fun?", sub:"(It will start automatically)", bg:"linear-gradient(120deg,#fffaf0,#fff1f5)", color:"#222", special:"count1"},
+    // ITS-ME (intro) — using hmmmmmm color style
+    {title:"👋 Hi there...", sub:"I heard today is your birthday — I made something for you...", bg:"linear-gradient(120deg,#ff9a9e,#fecfef)", color:"#111"},
+    {title:"😊 Hello — how are you? I wanted to make this small thing special for you.", sub:"Please focus for a sec — this is from me.", bg:"linear-gradient(120deg,#f6d365,#fda085)", color:"#111"},
+    {title:"🎂 I know we can't meet at 12:00 — so this is my little way to be with you.", sub:"I've been working on this for weeks 💌", bg:"linear-gradient(120deg,#a1c4fd,#c2e9fb)", color:"#111"},
+    {title:"✨ Are you ready? Tiny countdown will start...", sub:"(It'll lead into some fun things)", bg:"linear-gradient(120deg,#fbc2eb,#a6c1ee)", color:"#111", special:"count1"},
 
-    // HMMMMMM - funny/romantic jokes (10)
-    {title:"😜 You know what’s funny? I tried to ignore you… but my thoughts refused to cooperate.", bg:"linear-gradient(120deg,#ffd2e2,#ffeedd)", color:"#222"},
-    {title:"😉 Every time you smile, I forget what I was about to say.", bg:"linear-gradient(120deg,#ffd6a5,#fceabb)", color:"#222"},
-    {title:"😂 I had a pickup line... but you already picked up my heart.", bg:"linear-gradient(120deg,#b8c6ff,#f6f0ff)", color:"#222"},
-    {title:"🥰 I don’t need Wi-Fi — your presence gives me full connection.", bg:"linear-gradient(120deg,#fff1f0,#ffe6ee)", color:"#222"},
-    {title:"🤭 I tried to find someone better than you — Google returned no results.", bg:"linear-gradient(120deg,#eaffd0,#fff7d6)", color:"#222"},
-    {title:"🙈 You're my favorite song — stuck in my head all day.", bg:"linear-gradient(120deg,#ffdede,#ffeedd)", color:"#222"},
-    {title:"😅 You should have a warning: Highly addictive. Handle with care!", bg:"linear-gradient(120deg,#dfe9ff,#f2f7ff)", color:"#222"},
-    {title:"💘 My phone battery lasts longer than my ability to stay mad at you.", bg:"linear-gradient(120deg,#ffe2f0,#fff7f3)", color:"#222"},
-    {title:"🤣 You make me smile at my screen like a fool — worth every second.", bg:"linear-gradient(120deg,#f8ffd1,#eaf7dd)", color:"#222"},
-    {title:"💞 If loving you was a subject, I'd book extra classes.", bg:"linear-gradient(120deg,#f4e7ff,#fff1ff)", color:"#222", special:"count2"},
+    // HMMMMMM section — 10 romantic/funny slides
+    {title:"😜 You know what’s funny? I tried to ignore you… but my thoughts refused to cooperate.", bg:"linear-gradient(120deg,#ffd2e2,#ffeedd)", color:"#111"},
+    {title:"😉 Every time you smile, I forget what I was about to say.", bg:"linear-gradient(120deg,#ffd6a5,#fceabb)", color:"#111"},
+    {title:"😂 I was going to send you a pickup line… but you already picked up my heart.", bg:"linear-gradient(120deg,#b8c6ff,#f6f0ff)", color:"#111"},
+    {title:"🥰 I don’t need WiFi anymore. Your presence gives me full connection.", bg:"linear-gradient(120deg,#fff1f0,#ffe6ee)", color:"#111"},
+    {title:"🤭 I tried to find someone better than you… Google said: ‘No results found.’", bg:"linear-gradient(120deg,#fddb92,#d1fdff)", color:"#111"},
+    {title:"🙈 You’re like my favorite song — stuck in my head all day!", bg:"linear-gradient(120deg,#fad0c4,#ffd1ff)", color:"#111"},
+    {title:"😅 You should come with a warning sign: ‘Highly addictive, proceed with caution.’", bg:"linear-gradient(120deg,#f6d365,#fda085)", color:"#111"},
+    {title:"💘 My phone battery lasts longer than my ability to stay mad at you.", bg:"linear-gradient(120deg,#a1c4fd,#c2e9fb)", color:"#111"},
+    {title:"🤣 You’re the reason I smile at my screen like an idiot.", bg:"linear-gradient(120deg,#84fab0,#8fd3f4)", color:"#111"},
+    {title:"💞 If loving you was a subject… I’d still fail — just to study you again!", bg:"linear-gradient(120deg,#fbc2eb,#a6c1ee)", color:"#111", special:"count2"},
 
-    // (end of HMMMMMM) -> now optionally could continue other parts; here we stop after merged content
-    // Add an ending slide linking back to main site / or to minahil-birthday etc.
-    {title:"🎉 That was round of little jokes & teasing!", sub:"Hope that made you smile — want a final surprise?", bg:"linear-gradient(120deg,#fff0f5,#ffeef6)", color:"#222"},
-    {title:"❣️ Final little surprise is ready — click to open", sub:"(Or wait for the countdown)", bg:"linear-gradient(120deg,#fff7e6,#fff1d9)", color:"#222", special:"final" }
+    // After HMMMMMM closing slides
+    {title:"🎁 That was some teasing & love — one last thing coming", sub:"Ready for the final surprise?", bg:"linear-gradient(120deg,#fff0f5,#ffeef6)", color:"#111"},
+    {title:"✨ Final countdown — then the big surprise", sub:"(Please don't cry, only happy tears 🥺)", bg:"linear-gradient(120deg,#111,#000)", color:"#fff", special:"final"}
   ];
 
-  /* ============== DOM refs ============== */
+  /* ========== DOM refs ========== */
   const viewport = document.getElementById('viewport');
   const nextBtn = document.getElementById('nextBtn');
+  const prevBtn = document.getElementById('prevBtn');
   const countBox = document.getElementById('count');
   const emojiLayer = document.getElementById('emojiLayer');
-  const musicToggle = document.getElementById('musicToggle');
-
-  /* create slides in DOM */
-  const domSlides = [];
-  slides.forEach((s, i) => {
-    const el = document.createElement('div');
-    el.className = 'slide slide-right hidden';
-    el.style.background = s.bg || '#fff';
-    el.style.color = s.color || '#111';
-    el.innerHTML = `<div id="titleText">${s.title || ''}</div><div id="subText">${s.sub || ''}</div>`;
-    // initial position: right offscreen
-    viewport.appendChild(el);
-    domSlides.push(el);
-  });
+  const confetti = document.getElementById('confetti');
+  const soundPrompt = document.getElementById('soundPrompt');
 
   let idx = 0;
-  // helper to place slide positions
-  function setSlideClass(el, cls){
-    el.classList.remove('slide-left','slide-right','slide-center','hidden');
-    if(cls) el.classList.add(cls);
-  }
+  let countdownHandle = null;
+  let ytPlayer = null;
+  let musicStarted = false;
+  let triedUnmute = false;
 
-  // slide-in animation: current -> left, next from right -> center
-  function showSlide(toIndex, direction='next'){
-    // hide previous
-    domSlides.forEach((d, i) => {
-      d.classList.add('hidden');
-      d.classList.remove('slide-left','slide-right','slide-center');
+  /* create slides in DOM */
+  const domSlides = slides.map((s) => {
+    const el = document.createElement('div');
+    el.className = 'slide off-right';
+    el.style.background = s.bg;
+    el.style.color = s.color || '#111';
+    const title = `<div id="titleText">${s.title || ''}</div>`;
+    const sub = s.sub ? `<div id="subText">${s.sub}</div>` : '';
+    el.innerHTML = title + sub;
+    viewport.appendChild(el);
+    return el;
+  });
+
+  /* slide show helpers */
+  function showSlide(i, direction='next'){
+    if(i < 0) i = 0;
+    if(i >= domSlides.length) i = domSlides.length - 1;
+
+    // hide all
+    domSlides.forEach(d => {
+      d.classList.remove('center','off-left','off-right');
+      d.classList.add('off-right');
     });
-    const target = domSlides[toIndex];
-    // set starting position depending on direction
+
+    // show target
+    const t = domSlides[i];
     if(direction === 'next'){
-      setSlideClass(target,'slide-right');
-      // force reflow
-      void target.offsetWidth;
-      // bring center
-      target.classList.remove('hidden');
-      setSlideClass(target,'slide-center');
+      t.classList.remove('off-right');
+      void t.offsetWidth;
+      t.classList.add('center');
     } else {
-      setSlideClass(target,'slide-left');
-      void target.offsetWidth;
-      target.classList.remove('hidden');
-      setSlideClass(target,'slide-center');
+      t.classList.remove('off-left');
+      void t.offsetWidth;
+      t.classList.add('center');
     }
 
-    // update background & color for container stage
-    const s = slides[toIndex];
-    const stage = document.querySelector('.stage');
-    stage.style.background = s.bg || stage.style.background;
-    stage.style.color = s.color || stage.style.color;
+    // update stage color/background
+    const s = slides[i];
+    document.querySelector('.stage').style.background = s.bg || '';
+    document.querySelector('.stage').style.color = s.color || '';
 
-    // handle specials
+    // default UI
     countBox.style.display = 'none';
     nextBtn.style.display = 'inline-block';
-    if(s.special === 'count1'){
-      nextBtn.style.display = 'none';
-      runCountdown(5, ()=> { idx++; showSlide(idx,'next'); });
-    } else if(s.special === 'count2'){
+    prevBtn.style.display = (i > 0) ? 'inline-block' : 'none';
+
+    // handle specials
+    if(s.special === 'count1' || s.special === 'count2'){
       nextBtn.style.display = 'none';
       runCountdown(5, ()=> { idx++; showSlide(idx,'next'); });
     } else if(s.special === 'final'){
-      // final: show countdown and then link to hmmmmmm page (or open automatically)
       nextBtn.style.display = 'none';
       runFinalCountdown(8, ()=> {
-        // open hmmmmmm repo in same window
+        // final redirect to hmmmmmm repo
         window.location.href = 'https://tmehmoodmscs24seecs-ops.github.io/hmmmmmm/';
       });
     }
   }
 
-  // initialize first slide
-  showSlide(0,'next');
+  /* initial */
+  showSlide(0);
 
-  // next button handler
-  nextBtn.addEventListener('click', ()=>{
-    // start music on first user interaction
-    enableMusicOnInteraction();
+  /* navigation */
+  nextBtn.addEventListener('click', () => {
+    // first interaction: attempt to start/unmute music
+    if(!musicStarted) {
+      musicStarted = true;
+      createHiddenYTPlayer();
+    } else if(ytPlayer && triedUnmute === false) {
+      // try unmute when user clicks (good chance browsers will allow)
+      tryUnmute();
+    }
 
     idx++;
-    if(idx < slides.length){
-      showSlide(idx,'next');
-    } else {
-      // fallback
-      window.location.href = 'https://tmehmoodmscs24seecs-ops.github.io/hmmmmmm/';
-    }
+    if(idx < domSlides.length) showSlide(idx,'next');
+    else window.location.href = 'https://tmehmoodmscs24seecs-ops.github.io/hmmmmmm/';
+  });
+
+  prevBtn.addEventListener('click', () => {
+    idx = Math.max(0, idx-1);
+    showSlide(idx,'prev');
   });
 
   // keyboard navigation
   window.addEventListener('keydown', (e) => {
     if(e.key === 'ArrowRight' || e.key === 'Enter') nextBtn.click();
-    if(e.key === 'ArrowLeft' && idx>0){
-      idx--;
-      showSlide(idx,'prev');
-    }
+    if(e.key === 'ArrowLeft') prevBtn.click();
   });
 
-  /* ========== countdowns ========== */
-  let countdownHandle = null;
+  /* countdown helpers */
   function runCountdown(seconds, cb){
     countBox.style.display = 'block';
     countBox.textContent = seconds;
     let s = seconds;
-    countdownHandle = setInterval(()=>{
+    countdownHandle = setInterval(() => {
       s--;
       countBox.textContent = s;
       if(s <= 0){
@@ -218,92 +220,139 @@
         countBox.style.display = 'none';
         cb();
       }
-    },1000);
+    }, 1000);
   }
   function runFinalCountdown(seconds, cb){
     countBox.style.display = 'block';
     countBox.textContent = seconds;
     let s = seconds;
-    countdownHandle = setInterval(()=>{
+    countdownHandle = setInterval(()=> {
       s--;
       countBox.textContent = s;
       if(s <= 0){
         clearInterval(countdownHandle);
         countBox.style.display = 'none';
-        cb();
+        // confetti + message then callback
+        triggerConfetti();
+        const title = domSlides[idx].querySelector('#titleText');
+        if(title) title.textContent = "💞 Okay... open it now — please don't cry 🥺";
+        const sub = domSlides[idx].querySelector('#subText');
+        if(sub) sub.textContent = "Loading the surprise...";
+        setTimeout(cb,1400);
       }
     },1000);
   }
 
-  /* ========== emoji floating ========== */
+  /* emoji floating */
   const EMOJI_POOL = ["💖","😂","😘","💕","💞","🌸","😍","😅","🎈","🌟"];
   function spawnEmoji(){
     const e = document.createElement('div');
     e.className = 'emoji';
     e.style.left = (5 + Math.random()*90) + '%';
-    e.style.bottom = (5 + Math.random()*20) + 'vh';
-    e.style.fontSize = (18 + Math.random()*28) + 'px';
+    e.style.bottom = (5 + Math.random()*15) + 'vh';
+    e.style.fontSize = (18 + Math.random()*30) + 'px';
     e.style.animationDuration = (4 + Math.random()*5) + 's';
     e.textContent = EMOJI_POOL[Math.floor(Math.random()*EMOJI_POOL.length)];
     emojiLayer.appendChild(e);
     setTimeout(()=> e.remove(), 9000);
   }
-  const emojiTimer = setInterval(spawnEmoji, 380);
+  const emojiTimer = setInterval(spawnEmoji, 360);
 
-  /* ========== YouTube music (muted autoplay then unmute on interaction) ========== */
-  let ytPlayer = null, musicStarted = false;
-  const YT_ID = 'Umqb9KENgmk'; // your chosen video id
+  /* confetti */
+  function triggerConfetti(){
+    confetti.innerHTML = '';
+    for(let i=0;i<40;i++){
+      const p = document.createElement('div');
+      p.style.position='absolute';
+      p.style.left=(5+Math.random()*90)+'%';
+      p.style.top=(10+Math.random()*60)+'%';
+      p.style.width='8px'; p.style.height='12px';
+      p.style.background = ['#ff5fa0','#ffd66b','#8ee3a1','#9fd3ff'][Math.floor(Math.random()*4)];
+      p.style.opacity = 0.95; p.style.transform = `rotate(${Math.random()*360}deg)`;
+      p.style.borderRadius='2px';
+      confetti.appendChild(p);
+      setTimeout(()=> p.remove(), 2600 + Math.random()*1400);
+    }
+  }
 
-  function createYT(){
+  /* ========== YouTube hidden player logic ========== */
+  const YT_ID = 'Umqb9KENgmk'; // Tum Hi Ho
+  function createHiddenYTPlayer(){
     if(ytPlayer) return;
-    const wr = document.createElement('div');
-    wr.id = 'yt_hidden';
-    wr.style.position='fixed'; wr.style.left='-9999px'; wr.style.width='1px'; wr.style.height='1px';
-    document.body.appendChild(wr);
+    // create hidden wrapper div for player
+    const wrap = document.createElement('div');
+    wrap.id = 'yt-hidden-wrap';
+    wrap.style.position = 'fixed';
+    wrap.style.left = '-9999px';
+    wrap.style.width = '1px';
+    wrap.style.height = '1px';
+    document.body.appendChild(wrap);
 
-    ytPlayer = new YT.Player(wr, {
-      height:'1', width:'1',
+    ytPlayer = new YT.Player(wrap, {
+      height: '1', width: '1',
       videoId: YT_ID,
       playerVars: {
-        autoplay:1, controls:0, loop:1, playlist:YT_ID, modestbranding:1, rel:0, playsinline:1, mute:1
+        autoplay: 1,
+        controls: 0,
+        loop: 1,
+        playlist: YT_ID,
+        modestbranding: 1,
+        rel: 0,
+        playsinline: 1,
+        mute: 1
       },
-      events:{
-        onReady: (e)=> { e.target.mute(); e.target.setVolume(20); e.target.playVideo(); }
+      events: {
+        onReady: (e) => {
+          try {
+            e.target.mute(); // start muted
+            e.target.setVolume(22);
+            e.target.playVideo();
+            // try quick unmute after a tiny delay if interaction already happened
+            setTimeout(()=> { tryUnmute(); }, 400);
+          } catch(err){}
+        },
+        onError: (err) => { /* ignore player errors */ }
       }
     });
   }
 
-  function enableMusicOnInteraction(){
-    if(musicStarted) return;
-    musicStarted = true;
-    // attempt to create player
-    if(typeof YT === 'undefined' || !YT.Player) {
-      // API may not have loaded yet: try creating anyway (onYouTubeIframeAPIReady will exist)
-      createYT();
-    } else {
-      createYT();
+  function tryUnmute(){
+    if(!ytPlayer) return;
+    // If the player has API methods, try to unmute - user interaction required in many browsers
+    try {
+      if(ytPlayer.unMute) {
+        ytPlayer.unMute();
+        ytPlayer.setVolume(22);
+        triedUnmute = true;
+        soundPrompt.style.display = 'none';
+      }
+    } catch(e){
+      // if unmute blocked, show prompt
+      showSoundPrompt();
     }
-    // unmute after small delay (user-initiated)
-    setTimeout(() => {
-      try{ if(ytPlayer && ytPlayer.unMute) { ytPlayer.unMute(); ytPlayer.setVolume(24); } }catch(e){}
-    }, 400);
-    musicToggle.textContent = 'Music ON';
-    musicToggle.setAttribute('aria-pressed','true');
   }
 
-  // music toggle button: explicit user control
-  musicToggle.addEventListener('click', () => {
-    enableMusicOnInteraction();
-  });
+  function showSoundPrompt(){
+    soundPrompt.style.display = 'block';
+    // when user clicks anywhere, try unmute again
+    document.addEventListener('click', function interactiveUnmute(){
+      tryUnmute();
+      soundPrompt.style.display = 'none';
+      document.removeEventListener('click', interactiveUnmute);
+    });
+  }
 
-  // ensure YouTube API callback exists
-  function onYouTubeIframeAPIReady(){ /* we create player lazily on interaction */ }
+  // If API hasn't loaded yet, onYouTubeIframeAPIReady will be called by the external script.
+  // We create the player on first user interaction (Next click) via createHiddenYTPlayer() above.
 
-  /* cleanup */
+  /* cleanup on unload */
   window.addEventListener('beforeunload', ()=>{
-    try{ if(ytPlayer && ytPlayer.destroy) ytPlayer.destroy(); }catch(e){}
     clearInterval(emojiTimer);
+    try{ if(ytPlayer && ytPlayer.destroy) ytPlayer.destroy(); } catch(e){}
   });
+
+  // Provide global callback placeholder required by YT API
+  function onYouTubeIframeAPIReady(){ /* player created lazily on interaction */ }
   </script>
 </body>
 </html>
